@@ -372,14 +372,58 @@ const curProj = getCurProject();
 const container = document.getElementById("section-tabs");
 container.innerHTML = "";
 curProj.sections.forEach(sec => {
+const wrap = document.createElement("div");
+wrap.className = "flex items-center group";
 const btn = document.createElement("button");
 btn.type = "button";
 const isActive = sec.id === curProj.currentSectionId;
-btn.className = `px-2 py-0.5 rounded transition ${isActive ? "bg-gray-800 text-blue-400 font-bold border-b border-blue-500" : "text-gray-400 hover:text-gray-200"}`;
+btn.className = `px-2 py-0.5 rounded-l transition ${isActive ? "bg-gray-800 text-blue-400 font-bold border-b border-blue-500" : "text-gray-400 hover:text-gray-200"}`;
 btn.textContent = sec.name;
+btn.title = "クリックで切替 / ダブルクリックで名称変更";
 btn.onclick = () => { curProj.currentSectionId = sec.id; activeHighlightTime = null; saveStore(); };
-container.appendChild(btn);
+btn.ondblclick = () => renameSection(sec.id);
+wrap.appendChild(btn);
+const editBtn = document.createElement("button");
+editBtn.type = "button";
+editBtn.textContent = "✎";
+editBtn.title = "名称変更";
+editBtn.className = "px-1 text-gray-600 hover:text-indigo-400 opacity-60 group-hover:opacity-100";
+editBtn.onclick = (e) => { e.stopPropagation(); renameSection(sec.id); };
+wrap.appendChild(editBtn);
+const delBtn = document.createElement("button");
+delBtn.type = "button";
+delBtn.textContent = "✕";
+delBtn.title = "セクション削除";
+delBtn.className = "px-1 rounded-r text-gray-600 hover:text-red-400 opacity-60 group-hover:opacity-100";
+delBtn.onclick = (e) => { e.stopPropagation(); deleteSection(sec.id); };
+wrap.appendChild(delBtn);
+container.appendChild(wrap);
 });
+}
+function renameSection(sectionId) {
+const curProj = getCurProject();
+const sec = curProj.sections.find(s => s.id === sectionId);
+if (!sec) return;
+const name = prompt("セクション名を変更", sec.name);
+if (name === null) return;
+const trimmed = name.trim();
+if (!trimmed) { alert("セクション名を入力してください"); return; }
+sec.name = trimmed;
+saveStore();
+}
+function deleteSection(sectionId) {
+const curProj = getCurProject();
+if (curProj.sections.length <= 1) { alert("最後の1セクションは削除できません"); return; }
+const sec = curProj.sections.find(s => s.id === sectionId);
+if (!sec) return;
+if (!confirm(`セクション「${sec.name}」を削除しますか？このセクションに配置されたカードも削除されます。`)) return;
+curProj.sections = curProj.sections.filter(s => s.id !== sectionId);
+curProj.cards = curProj.cards.filter(c => c.sectionId !== sectionId);
+if (curProj.currentSectionId === sectionId) {
+curProj.currentSectionId = curProj.sections[0].id;
+}
+activeHighlightTime = null;
+saveStore();
 }
 function renderCharacters() {
 const curProj = getCurProject();
@@ -583,14 +627,41 @@ const file = e.target.files[0];
 if (!file) return;
 const reader = new FileReader();
 reader.onload = (event) => {
+let parsed;
 try {
-db = JSON.parse(event.target.result);
+parsed = JSON.parse(event.target.result);
+} catch (err) {
+alert("読み込み失敗：JSONとして解析できませんでした");
+e.target.value = "";
+return;
+}
+try {
+if (parsed && Array.isArray(parsed.projects)) {
+// 「全作品を保存」形式（db全体）
+db = parsed;
+if (!db.activeProjectId || !db.projects.find(p => p.id === db.activeProjectId)) {
+db.activeProjectId = db.projects.length ? db.projects[0].id : null;
+}
+} else if (parsed && Array.isArray(parsed.sections) && Array.isArray(parsed.characters)) {
+// 「この作品を保存」形式（作品1件分）
+if (!parsed.id || db.projects.find(p => p.id === parsed.id)) {
+parsed.id = "p-" + Date.now();
+}
+if (!Array.isArray(parsed.cards)) parsed.cards = [];
+db.projects.push(parsed);
+db.activeProjectId = parsed.id;
+} else {
+throw new Error("unrecognized format");
+}
 saveStore();
 alert("読み込み完了！");
-} catch(err) {
-alert("読み込み失敗");
+} catch (err) {
+alert("読み込み失敗：ファイルの形式が正しくありません");
+} finally {
+e.target.value = "";
 }
 };
+reader.onerror = () => alert("読み込み失敗：ファイルを読み取れませんでした");
 reader.readAsText(file);
 }
 function saveCurrentProjectFile() {
