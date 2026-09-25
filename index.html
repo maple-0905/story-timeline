@@ -19,11 +19,7 @@ button, [onclick] { touch-action: manipulation; cursor: pointer; }
 </style>
 </head>
 <body class="bg-gray-950 text-gray-100 h-screen overflow-hidden font-sans select-none text-xs flex flex-col">
-<!-- ========================================== -->
-<!-- 画面1: 作品一覧・管理画面 (スケッチ Page 1) -->
-<!-- ========================================== -->
 <div id="screen-projects" class="view-screen active flex-col flex-1 overflow-y-auto">
-<!-- トップナビ -->
 <header class="bg-gray-900 border-b border-gray-800 px-6 py-4 flex items-center justify-between shrink-0">
 <div class="flex items-center space-x-3">
 <span class="text-2xl">🕵️‍♂️</span>
@@ -46,7 +42,6 @@ button, [onclick] { touch-action: manipulation; cursor: pointer; }
 </button>
 </div>
 </header>
-<!-- プロジェクトカード一覧 -->
 <main class="flex-1 max-w-6xl w-full mx-auto p-6">
 <div class="mb-4 flex items-center justify-between">
 <h2 class="text-sm font-bold text-gray-300 flex items-center gap-2">
@@ -55,55 +50,41 @@ button, [onclick] { touch-action: manipulation; cursor: pointer; }
 <span class="text-gray-500 text-[11px]">カードをクリックするとタイムラインが開きます</span>
 </div>
 <div id="project-card-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-<!-- 動的カード挿入 -->
 </div>
 </main>
 </div>
-<!-- ======================================================== -->
-<!-- 画面2: タイムライン編集・閲覧画面 (スケッチ Page 2 & 3) -->
-<!-- ======================================================== -->
 <div id="screen-timeline" class="view-screen flex-col flex-1 overflow-hidden">
-<!-- タイムライン上部ヘッダー -->
 <header class="bg-gray-900 border-b border-gray-800 px-3 py-2 flex items-center justify-between shrink-0 flex-wrap gap-2">
 <div class="flex items-center space-x-2">
-<!-- 戻るボタン -->
 <button type="button" onclick="goToProjectsScreen()" class="bg-gray-800 hover:bg-gray-700 text-gray-300 px-2 py-1 rounded text-xs flex items-center gap-1 font-bold">
 <span>←</span> 作品一覧
 </button>
 <div class="h-4 w-px bg-gray-700"></div>
 <h2 id="current-project-name" class="font-bold text-indigo-300 text-sm max-w-[140px] truncate"></h2>
-<!-- セクション切り替えタブ (スケッチ Page 3) -->
 <div id="section-tabs" class="flex space-x-1 border-l border-gray-700 pl-2"></div>
 <button type="button" onclick="addSection()" class="bg-gray-800 hover:bg-gray-700 px-2 py-0.5 rounded text-gray-300 font-bold" title="セクション追加">+</button>
 <button type="button" onclick="openTimeSlotsModal()" class="bg-gray-800 hover:bg-gray-700 px-2 py-0.5 rounded text-gray-400 text-[10px]" title="時間枠の追加・編集">⚙️ 時間設定</button>
 </div>
 <div class="flex items-center space-x-2">
-<!-- GM/PL 表示切替 -->
 <div class="bg-gray-800 p-0.5 rounded flex items-center">
 <button type="button" id="view-mode-pl" onclick="setViewMode('pl')" class="px-2 py-0.5 rounded bg-blue-600 text-white font-medium">PL(表)</button>
 <button type="button" id="view-mode-gm" onclick="setViewMode('gm')" class="px-2 py-0.5 rounded text-gray-400 font-medium">GM(真相)</button>
 </div>
-<!-- 編集/閲覧 モード -->
 <div class="bg-gray-800 p-0.5 rounded flex items-center">
 <button type="button" id="mode-edit" onclick="setAppMode('edit')" class="px-2 py-0.5 rounded bg-indigo-600 text-white font-medium">編集</button>
 <button type="button" id="mode-view" onclick="setAppMode('view')" class="px-2 py-0.5 rounded text-gray-400 font-medium">閲覧</button>
 </div>
-<!-- 作品の保存 -->
 <button type="button" onclick="saveCurrentProjectFile()" class="bg-gray-800 hover:bg-gray-700 px-2 py-1 rounded border border-gray-700">この作品を保存</button>
 </div>
 </header>
-<!-- 時刻サマリーバー (特定時刻の全員の動向) -->
 <div id="time-summary-bar" class="bg-gray-900/95 border-b border-gray-800 px-3 py-1.5 shrink-0 flex items-center justify-between">
 <div class="flex items-center space-x-2 overflow-hidden w-full">
 <span id="summary-time-label" class="bg-blue-900/60 text-blue-300 px-2 py-0.5 rounded font-mono font-bold shrink-0">時刻未選択</span>
 <p id="summary-content" class="text-gray-300 truncate">「閲覧モード」で左端の時刻をタップすると、その時間の全員の概要が表示されます。</p>
 </div>
 </div>
-<!-- ワークスペース -->
 <div class="flex flex-1 overflow-hidden">
-<!-- 左サイドバー（キャラクター/メモ一覧 ＆ 未配置トレイ） -->
 <div class="w-52 sm:w-64 bg-gray-900 border-r border-gray-800 flex flex-col shrink-0">
-<!-- 列管理（キャラ or メモ） -->
 <div class="p-2 border-b border-gray-800 flex flex-col">
 <div class="flex justify-between items-center mb-1.5">
 <span class="font-bold text-gray-300 flex items-center gap-1">
@@ -113,7 +94,6 @@ button, [onclick] { touch-action: manipulation; cursor: pointer; }
 </div>
 <div id="character-list" class="max-h-36 overflow-y-auto space-y-1 pr-0.5"></div>
 </div>
-<!-- 未配置トレイ -->
 <div class="flex-1 flex flex-col overflow-hidden p-2">
 <div class="flex justify-between items-center mb-1.5">
 <span class="font-bold text-gray-300 flex items-center gap-1">
@@ -121,13 +101,9 @@ button, [onclick] { touch-action: manipulation; cursor: pointer; }
 </span>
 <button type="button" onclick="openCardModal(null, true)" class="bg-gray-800 hover:bg-gray-700 px-1.5 py-0.5 rounded text-gray-300 text-[11px]">+ 作成</button>
 </div>
-<div class="text-[10px] text-gray-400 mb-1 leading-tight">
-💡「配置する」ボタンで即座にタイムラインへ移動できます。
-</div>
 <div id="unassigned-tray" class="flex-1 overflow-y-auto space-y-2 border border-dashed border-gray-800 rounded p-1.5 bg-gray-950/50" ondragover="handleTrayDragOver(event)" ondrop="handleTrayDrop(event)"></div>
 </div>
 </div>
-<!-- 右側：タイムライングリッド (上下左右スクロール対応) -->
 <div class="flex-1 flex flex-col overflow-hidden bg-gray-950">
 <div class="flex-1 overflow-auto" id="timeline-container">
 <table class="w-full border-collapse border-spacing-0 text-left">
@@ -142,10 +118,6 @@ button, [onclick] { touch-action: manipulation; cursor: pointer; }
 </div>
 </div>
 </div>
-<!-- ========================================== -->
-<!-- モーダル各種                               -->
-<!-- ========================================== -->
-<!-- 1. 作品作成/編集モーダル (スケッチ Page 1) -->
 <div id="project-modal" style="display: none;" class="fixed inset-0 bg-black/75 backdrop-blur-sm items-center justify-center z-50 p-4">
 <div class="bg-gray-900 border border-gray-700 w-full max-w-md rounded-lg p-5 shadow-2xl space-y-3">
 <div class="flex justify-between items-center">
@@ -153,20 +125,20 @@ button, [onclick] { touch-action: manipulation; cursor: pointer; }
 <button type="button" onclick="closeProjectModal()" class="text-gray-400 hover:text-gray-200 p-1 text-sm">✕</button>
 </div>
 <div>
-<label class="block text-gray-400 mb-1">作品名 / シナリオ管理名 <span class="text-red-400">*</span></label>
-<input type="text" id="project-title" class="w-full bg-gray-800 border border-gray-700 rounded p-2 text-gray-100" placeholder="例: 霧の洋館殺人事件">
+<label class="block text-gray-400 mb-1">作品名 <span class="text-red-400">*</span></label>
+<input type="text" id="project-title" class="w-full bg-gray-800 border border-gray-700 rounded p-2 text-gray-100">
 </div>
 <div>
 <label class="block text-gray-400 mb-1">キャッチコピー</label>
-<input type="text" id="project-tagline" class="w-full bg-gray-800 border border-gray-700 rounded p-2 text-gray-100" placeholder="例: 誰も出られない嵐の孤島で起こる連続密室">
+<input type="text" id="project-tagline" class="w-full bg-gray-800 border border-gray-700 rounded p-2 text-gray-100">
 </div>
 <div>
-<label class="block text-gray-400 mb-1">あらすじ / メモ</label>
-<textarea id="project-synopsis" rows="2" class="w-full bg-gray-800 border border-gray-700 rounded p-2 text-gray-100" placeholder="舞台設定や前提条件など"></textarea>
+<label class="block text-gray-400 mb-1">あらすじ</label>
+<textarea id="project-synopsis" rows="2" class="w-full bg-gray-800 border border-gray-700 rounded p-2 text-gray-100"></textarea>
 </div>
 <div class="grid grid-cols-2 gap-3">
 <div>
-<label class="block text-gray-400 mb-1">作品メインカラー</label>
+<label class="block text-gray-400 mb-1">作品カラー</label>
 <input type="color" id="project-color" value="#6366f1" class="w-full h-8 bg-gray-800 border border-gray-700 rounded cursor-pointer">
 </div>
 <div>
@@ -174,21 +146,12 @@ button, [onclick] { touch-action: manipulation; cursor: pointer; }
 <input type="text" id="project-icon" value="📜" class="w-full bg-gray-800 border border-gray-700 rounded p-1.5 text-center text-lg">
 </div>
 </div>
-<div class="border-t border-gray-800 pt-3">
-<label class="block text-gray-400 mb-1">時間軸のプリセット設定</label>
-<select id="project-preset" class="w-full bg-gray-800 border border-gray-700 rounded p-2 text-gray-200">
-<option value="hourly">1時間区切り（08:00 〜 18:00）</option>
-<option value="story">物語区切り（朝・昼・夕方・夜・深夜）</option>
-<option value="custom">カスタム（あとから自由に編集）</option>
-</select>
-</div>
 <div class="flex justify-end space-x-2 pt-2 border-t border-gray-800">
 <button type="button" onclick="closeProjectModal()" class="px-3 py-1.5 rounded bg-gray-800 hover:bg-gray-700 text-gray-300">閉じる</button>
-<button type="button" onclick="saveProject()" class="px-4 py-1.5 rounded bg-indigo-600 hover:bg-indigo-500 text-white font-medium">作成して開く</button>
+<button type="button" onclick="saveProject()" class="px-4 py-1.5 rounded bg-indigo-600 hover:bg-indigo-500 text-white font-medium">保存</button>
 </div>
 </div>
 </div>
-<!-- 2. カード追加・編集モーダル -->
 <div id="card-modal" style="display: none;" class="fixed inset-0 bg-black/75 backdrop-blur-sm items-center justify-center z-50 p-4">
 <div class="bg-gray-900 border border-gray-700 w-full max-w-sm rounded-lg p-4 shadow-xl space-y-3">
 <div class="flex justify-between items-center">
@@ -196,7 +159,7 @@ button, [onclick] { touch-action: manipulation; cursor: pointer; }
 <button type="button" onclick="closeCardModal()" class="text-gray-400 hover:text-gray-200 p-1 text-sm">✕</button>
 </div>
 <div>
-<label class="block text-gray-400 mb-1">対象列（キャラクター / メモ）</label>
+<label class="block text-gray-400 mb-1">対象列</label>
 <select id="card-char-select" class="w-full bg-gray-800 border border-gray-700 rounded p-1.5 text-gray-200"></select>
 </div>
 <div class="grid grid-cols-2 gap-2">
@@ -210,22 +173,19 @@ button, [onclick] { touch-action: manipulation; cursor: pointer; }
 </div>
 </div>
 <div>
-<label class="block text-gray-400 mb-1">場所（同室ハイライト用）</label>
-<input type="text" id="card-location" placeholder="例: 書斎、倉庫、裏庭" class="w-full bg-gray-800 border border-gray-700 rounded p-1.5 text-gray-200">
+<label class="block text-gray-400 mb-1">場所</label>
+<input type="text" id="card-location" placeholder="例: 書斎、倉庫" class="w-full bg-gray-800 border border-gray-700 rounded p-1.5 text-gray-200">
 </div>
 <div>
-<label class="block text-gray-400 mb-1">表の行動（PL公開情報）</label>
-<textarea id="card-public-text" rows="2" class="w-full bg-gray-800 border border-gray-700 rounded p-1.5 text-gray-200" placeholder="公開される行動や証言"></textarea>
+<label class="block text-gray-400 mb-1">表の行動（PL公開）</label>
+<textarea id="card-public-text" rows="2" class="w-full bg-gray-800 border border-gray-700 rounded p-1.5 text-gray-200"></textarea>
 </div>
 <div>
-<label class="block text-indigo-400 mb-1">真相・裏の行動（GM非公開情報）</label>
-<textarea id="card-secret-text" rows="2" class="w-full bg-gray-800 border border-indigo-900/60 rounded p-1.5 text-gray-200" placeholder="凶器の隠蔽、アリバイ偽装など"></textarea>
+<label class="block text-indigo-400 mb-1">真相・裏の行動（GM非公開）</label>
+<textarea id="card-secret-text" rows="2" class="w-full bg-gray-800 border border-indigo-900/60 rounded p-1.5 text-gray-200"></textarea>
 </div>
 <div class="flex justify-between pt-2 border-t border-gray-800">
-<div class="flex items-center space-x-2">
 <button type="button" id="card-delete-btn" onclick="deleteCurrentCard()" class="text-red-400 hover:text-red-300">削除</button>
-<button type="button" id="card-to-tray-btn" onclick="moveCurrentCardToTray()" class="text-amber-400 hover:text-amber-300 hidden">トレイへ退避</button>
-</div>
 <div class="space-x-2">
 <button type="button" onclick="closeCardModal()" class="px-3 py-1 rounded bg-gray-800 hover:bg-gray-700 text-gray-300">閉じる</button>
 <button type="button" onclick="saveCard()" class="px-3 py-1 rounded bg-indigo-600 hover:bg-indigo-500 text-white font-medium">保存</button>
@@ -233,30 +193,12 @@ button, [onclick] { touch-action: manipulation; cursor: pointer; }
 </div>
 </div>
 </div>
-<!-- 3. キャラクター/メモ列 追加モーダル (スケッチ Page 2) -->
 <div id="char-modal" style="display: none;" class="fixed inset-0 bg-black/75 backdrop-blur-sm items-center justify-center z-50 p-4">
 <div class="bg-gray-900 border border-gray-700 w-full max-w-xs rounded-lg p-4 shadow-xl space-y-3">
 <h3 class="font-bold text-sm text-gray-200">新規列の追加</h3>
 <div>
-<label class="block text-gray-400 mb-1">種別</label>
-<div class="flex space-x-2">
-<label class="flex items-center space-x-1 cursor-pointer">
-<input type="radio" name="col-type" value="character" checked onchange="toggleColType(this.value)">
-<span>キャラクター</span>
-</label>
-<label class="flex items-center space-x-1 cursor-pointer">
-<input type="radio" name="col-type" value="memo" onchange="toggleColType(this.value)">
-<span>全体メモ・状況</span>
-</label>
-</div>
-</div>
-<div>
-<label class="block text-gray-400 mb-1">名前 / 項目名 <span class="text-red-400">*</span></label>
-<input type="text" id="new-char-name" class="w-full bg-gray-800 border border-gray-700 rounded p-1.5 text-gray-200" placeholder="例: 探偵A、現場の物証">
-</div>
-<div id="char-image-group">
-<label class="block text-gray-400 mb-1">画像URL（省略時はアイコン）</label>
-<input type="text" id="new-char-image" class="w-full bg-gray-800 border border-gray-700 rounded p-1.5 text-gray-200" placeholder="https://... または絵文字">
+<label class="block text-gray-400 mb-1">名前 <span class="text-red-400">*</span></label>
+<input type="text" id="new-char-name" class="w-full bg-gray-800 border border-gray-700 rounded p-1.5 text-gray-200">
 </div>
 <div>
 <label class="block text-gray-400 mb-1">テーマカラー</label>
@@ -268,17 +210,9 @@ button, [onclick] { touch-action: manipulation; cursor: pointer; }
 </div>
 </div>
 </div>
-<!-- 4. 時間枠カスタマイズモーダル (スケッチ Page 1) -->
 <div id="time-modal" style="display: none;" class="fixed inset-0 bg-black/75 backdrop-blur-sm items-center justify-center z-50 p-4">
 <div class="bg-gray-900 border border-gray-700 w-full max-w-sm rounded-lg p-4 shadow-xl space-y-3">
-<h3 class="font-bold text-sm text-gray-200">このセクションの時間枠編集</h3>
-<p class="text-[11px] text-gray-400 leading-snug">
-区切り時刻をカンマ(,)区切りで指定できます。
-
-例: <code>08:00, 10:00, 12:00, 14:00</code>
-
-または: <code>朝, 昼, 夕方, 夜, 深夜</code>
-</p>
+<h3 class="font-bold text-sm text-gray-200">時間枠編集</h3>
 <textarea id="time-slots-input" rows="4" class="w-full bg-gray-800 border border-gray-700 rounded p-2 text-gray-100 font-mono text-xs"></textarea>
 <div class="flex justify-end space-x-2 pt-2">
 <button type="button" onclick="closeTimeSlotsModal()" class="px-3 py-1 rounded bg-gray-800 hover:bg-gray-700 text-gray-300">閉じる</button>
@@ -286,9 +220,6 @@ button, [onclick] { touch-action: manipulation; cursor: pointer; }
 </div>
 </div>
 </div>
-<!-- ========================================== -->
-<!-- アプリケーション JavaScript                -->
-<!-- ========================================== -->
 <script>
 const defaultStore = {
 activeProjectId: "p1",
@@ -308,15 +239,12 @@ sections: [
 characters: [
 { id: "char-1", name: "探偵A", color: "#3b82f6", type: "character", image: "" },
 { id: "char-2", name: "助手B", color: "#10b981", type: "character", image: "" },
-{ id: "char-3", name: "容疑者C", color: "#ef4444", type: "character", image: "" },
-{ id: "char-4", name: "現場メモ", color: "#f59e0b", type: "memo", image: "📝" }
+{ id: "char-3", name: "容疑者C", color: "#ef4444", type: "character", image: "" }
 ],
 cards: [
 { id: "c1", sectionId: "sec-1", charId: "char-1", startTime: "09:00", endTime: "11:00", location: "書斎", publicText: "現場の調査を開始", secretText: "金庫の暗号メモを発見し隠す" },
 { id: "c2", sectionId: "sec-1", charId: "char-2", startTime: "09:00", endTime: "10:00", location: "書斎", publicText: "探偵のアシスタント", secretText: "特に怪しい動きはなし" },
-{ id: "c3", sectionId: "sec-1", charId: "char-3", startTime: "09:00", endTime: "09:00", location: "中庭", publicText: "散歩をしていたと証言", secretText: "裏口から倉庫へ移動していた" },
-{ id: "c4", sectionId: "sec-1", charId: "char-4", startTime: "09:00", endTime: "09:00", location: "書斎", publicText: "机の上に争った痕跡あり", secretText: "犯人のボタンが落ちていた" },
-{ id: "c5", sectionId: "sec-1", charId: null, startTime: null, endTime: null, location: "倉庫", publicText: "凶器の候補：燭台", secretText: "血痕が拭き取られている" }
+{ id: "c3", sectionId: "sec-1", charId: "char-3", startTime: "09:00", endTime: "09:00", location: "中庭", publicText: "散歩をしていたと証言", secretText: "裏口から倉庫へ移動していた" }
 ]
 }
 ]
@@ -335,7 +263,7 @@ localStorage.setItem("story_all_projects_data", JSON.stringify(val));
 } catch (e) {}
 }
 let db = safeGetStore();
-let currentScreen = "projects"; // "projects" | "timeline"
+let currentScreen = "projects";
 let appMode = "edit";
 let viewMode = "pl";
 let activeHighlightTime = null;
@@ -344,7 +272,7 @@ let editingCardId = null;
 let editingProjectId = null;
 let draggedCardId = null;
 function getCurProject() {
-return db.projects.find(p => p.id === db.activeProjectId) || db.projects[0];
+return (db.projects && db.projects.find(p => p.id === db.activeProjectId)) || db.projects[0];
 }
 function saveStore() {
 safeSetStore(db);
@@ -354,7 +282,6 @@ renderProjectsScreen();
 renderTimelineScreen();
 }
 }
-// --- 画面遷移制御 ---
 function showScreen(screenName) {
 currentScreen = screenName;
 document.querySelectorAll(".view-screen").forEach(el => el.classList.remove("active"));
@@ -366,99 +293,45 @@ document.getElementById("screen-timeline").classList.add("active");
 renderTimelineScreen();
 }
 }
-function goToProjectsScreen() {
-showScreen("projects");
-}
+function goToProjectsScreen() { showScreen("projects"); }
 function openProject(projectId) {
 db.activeProjectId = projectId;
 saveStore();
 showScreen("timeline");
 }
-// --- 画面1: 作品一覧のレンダリング (スケッチ Page 1) ---
 function renderProjectsScreen() {
 const grid = document.getElementById("project-card-grid");
+if (!grid) return;
 grid.innerHTML = "";
 db.projects.forEach(p => {
 const card = document.createElement("div");
 card.className = "bg-gray-900 border border-gray-800 hover:border-gray-700 rounded-xl p-5 shadow-lg flex flex-col justify-between cursor-pointer transition transform hover:-translate-y-1 relative group";
-card.style.borderTop = ⁠4px solid ${p.color || '#6366f1'}⁠;
+card.style.borderTop = `4px solid ${p.color || '#6366f1'}`;
 card.onclick = () => openProject(p.id);
-const secCount = p.sections ? p.sections.length : 0;
-const charCount = p.characters ? p.characters.length : 0;
-const cardCount = p.cards ? p.cards.length : 0;
-card.innerHTML = `
-<div>
-<div class="flex items-center justify-between mb-3">
-<span class="text-3xl bg-gray-950 p-2 rounded-lg border border-gray-800">￼
-￼
-￼
-￼
-￼
-￼
-￼{p.title}</h3>
-<p class="text-indigo-400/90 text-xs mb-2 font-medium">￼
-￼{p.synopsis || 'あらすじはまだ登録されていません。'}</p>
-</div>
-<div class="mt-4 pt-3 border-t border-gray-800 flex items-center justify-between text-[11px] text-gray-500">
-<span>🔖 セクション: ${secCount}</span>
-<span>👥 キャラ: ${charCount}</span>
-<span>⏱ イベント: ${cardCount}</span>
-</div>
-`;
+card.innerHTML = `<div> <div class="flex items-center justify-between mb-3"> <span class="text-3xl bg-gray-950 p-2 rounded-lg border border-gray-800">${p.icon || '📜'}</span> <button type="button" onclick="event.stopPropagation(); deleteProject('${p.id}')" class="text-red-400 hover:text-red-300 px-2 py-1 rounded bg-gray-800 text-[10px]">削除</button> </div> <h3 class="text-base font-bold text-gray-100 group-hover:text-indigo-300 transition mb-1">${p.title}</h3> <p class="text-indigo-400/90 text-xs mb-2 font-medium">${p.tagline || 'キャッチコピー未設定'}</p> <p class="text-gray-400 text-xs line-clamp-2 leading-relaxed">${p.synopsis || 'あらすじ未設定'}</p> </div> <div class="mt-4 pt-3 border-t border-gray-800 flex items-center justify-between text-[11px] text-gray-500"> <span>🔖 セクション: ${p.sections ? p.sections.length : 0}</span> <span>👥 キャラ: ${p.characters ? p.characters.length : 0}</span> </div>`;
 grid.appendChild(card);
 });
 }
-function openProjectModal(editId = null) {
-editingProjectId = editId;
-const modal = document.getElementById("project-modal");
-if (editId) {
-const p = db.projects.find(item => item.id === editId);
-document.getElementById("project-modal-title").textContent = "作品設定の編集";
-document.getElementById("project-title").value = p.title;
-document.getElementById("project-tagline").value = p.tagline || "";
-document.getElementById("project-synopsis").value = p.synopsis || "";
-document.getElementById("project-color").value = p.color || "#6366f1";
-document.getElementById("project-icon").value = p.icon || "📜";
-} else {
-document.getElementById("project-modal-title").textContent = "作品プロットの新規作成";
+function openProjectModal() {
 document.getElementById("project-title").value = "";
 document.getElementById("project-tagline").value = "";
 document.getElementById("project-synopsis").value = "";
-document.getElementById("project-color").value = "#6366f1";
-document.getElementById("project-icon").value = "📜";
+document.getElementById("project-modal").style.display = "flex";
 }
-modal.style.display = "flex";
-}
-function closeProjectModal() {
-document.getElementById("project-modal").style.display = "none";
-}
+function closeProjectModal() { document.getElementById("project-modal").style.display = "none"; }
 function saveProject() {
 const title = document.getElementById("project-title").value.trim();
-if (!title) {
-alert("作品名を入力してください。");
-return;
-}
-const tagline = document.getElementById("project-tagline").value.trim();
-const synopsis = document.getElementById("project-synopsis").value.trim();
-const color = document.getElementById("project-color").value;
-const icon = document.getElementById("project-icon").value.trim() || "📜";
-const preset = document.getElementById("project-preset").value;
-let timeSlots = ["08:00", "10:00", "12:00", "14:00", "16:00", "18:00"];
-if (preset === "story") timeSlots = ["朝", "昼", "夕方", "夜", "深夜"];
-if (editingProjectId) {
-const p = db.projects.find(item => item.id === editingProjectId);
-Object.assign(p, { title, tagline, synopsis, color, icon });
-closeProjectModal();
-saveStore();
-} else {
+if (!title) { alert("作品名を入力してください"); return; }
 const newProj = {
 id: "p-" + Date.now(),
-title, tagline, synopsis, color, icon,
+title,
+tagline: document.getElementById("project-tagline").value.trim(),
+synopsis: document.getElementById("project-synopsis").value.trim(),
+color: document.getElementById("project-color").value,
+icon: document.getElementById("project-icon").value || "📜",
 currentSectionId: "sec-1",
-sections: [{ id: "sec-1", name: "1日目", timeSlots }],
-characters: [
-{ id: "char-" + Date.now(), name: "主人公", color: "#3b82f6", type: "character", image: "" }
-],
+sections: [{ id: "sec-1", name: "1日目", timeSlots: ["08:00", "10:00", "12:00", "14:00"] }],
+characters: [{ id: "char-1", name: "主人公", color: "#3b82f6" }],
 cards: []
 };
 db.projects.push(newProj);
@@ -467,22 +340,13 @@ closeProjectModal();
 saveStore();
 showScreen("timeline");
 }
-}
-function editProjectMeta(id) {
-openProjectModal(id);
-}
 function deleteProject(id) {
-if (db.projects.length <= 1) {
-alert("最低1つの作品が必要です。削除できません。");
-return;
-}
-const p = db.projects.find(item => item.id === id);
-if (!confirm(⁠作品「${p.title}」を完全に削除しますか？⁠)) return;
-db.projects = db.projects.filter(item => item.id !== id);
+if (db.projects.length <= 1) { alert("最後の1作品は削除できません"); return; }
+if (!confirm("この作品を削除しますか？")) return;
+db.projects = db.projects.filter(p => p.id !== id);
 if (db.activeProjectId === id) db.activeProjectId = db.projects[0].id;
 saveStore();
 }
-// --- 画面2: タイムラインのレンダリング (スケッチ Page 2 & 3) ---
 function renderTimelineScreen() {
 const curProj = getCurProject();
 document.getElementById("current-project-name").textContent = curProj.title;
@@ -511,7 +375,7 @@ curProj.sections.forEach(sec => {
 const btn = document.createElement("button");
 btn.type = "button";
 const isActive = sec.id === curProj.currentSectionId;
-btn.className = ⁠px-2 py-0.5 rounded transition ${isActive ? "bg-gray-800 text-blue-400 font-bold border-b border-blue-500" : "text-gray-400 hover:text-gray-200"}⁠;
+btn.className = `px-2 py-0.5 rounded transition ${isActive ? "bg-gray-800 text-blue-400 font-bold border-b border-blue-500" : "text-gray-400 hover:text-gray-200"}`;
 btn.textContent = sec.name;
 btn.onclick = () => { curProj.currentSectionId = sec.id; activeHighlightTime = null; saveStore(); };
 container.appendChild(btn);
@@ -521,92 +385,54 @@ function renderCharacters() {
 const curProj = getCurProject();
 const container = document.getElementById("character-list");
 container.innerHTML = "";
-if (curProj.characters.length === 0) {
-container.innerHTML = ⁠<span class="text-[11px] text-gray-500">列がありません</span>⁠;
-return;
-}
 curProj.characters.forEach(char => {
-const isMemo = char.type === "memo";
-const iconBadge = isMemo ? "📝" : (char.image && !char.image.startsWith("http") ? char.image : "👤");
 const item = document.createElement("div");
-item.className = "flex items-center justify-between bg-gray-950/60 border border-gray-800/80 px-2 py-1 rounded text-[11px] group";
-item.innerHTML = ⁠<div class="flex items-center space-x-1.5 truncate"> <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background-color: ${char.color}"></span> <span class="text-gray-400 text-[10px]">${iconBadge}</span> <span class="text-gray-200 truncate font-medium">${char.name}</span> </div> <button type="button" onclick="deleteCharacter('${char.id}')" title="削除" class="text-gray-500 hover:text-red-400 p-1 opacity-80 group-hover:opacity-100 transition"> ✕ </button>⁠;
+item.className = "flex items-center justify-between bg-gray-950/60 border border-gray-800/80 px-2 py-1 rounded text-[11px]";
+item.innerHTML = `<div class="flex items-center space-x-1.5 truncate"> <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background-color: ${char.color}"></span> <span class="text-gray-200 truncate font-medium">${char.name}</span> </div> <button type="button" onclick="deleteCharacter('${char.id}')" class="text-gray-500 hover:text-red-400 p-0.5">✕</button>`;
 container.appendChild(item);
 });
 }
 function deleteCharacter(charId) {
 const curProj = getCurProject();
-const char = curProj.characters.find(c => c.id === charId);
-if (!char) return;
-if (!confirm(⁠列「${char.name}」を削除しますか？\n（配置済みのカードは未配置トレイへ退避されます）⁠)) return;
-curProj.cards.forEach(c => {
-if (c.charId === charId) {
-c.charId = null;
-c.startTime = null;
-c.endTime = null;
-}
-});
+if (!confirm("このキャラを削除しますか？")) return;
 curProj.characters = curProj.characters.filter(c => c.id !== charId);
 saveStore();
 }
 function renderTimeline() {
 const curProj = getCurProject();
-const curSec = curProj.sections.find(s => s.id === curProj.currentSectionId);
+const curSec = curProj.sections.find(s => s.id === curProj.currentSectionId) || curProj.sections[0];
 const headerRow = document.getElementById("timeline-header-row");
 const tbody = document.getElementById("timeline-body");
-headerRow.innerHTML = ⁠<th class="w-20 min-w-[5rem] p-2 text-center font-mono text-gray-400 border-r border-gray-800">時間</th>⁠;
+headerRow.innerHTML = `<th class="w-20 min-w-[5rem] p-2 text-center font-mono text-gray-400 border-r border-gray-800">時間</th>`;
 curProj.characters.forEach(char => {
 const th = document.createElement("th");
 th.className = "min-w-[11rem] max-w-[13rem] p-2 border-r border-gray-800";
-const iconBadge = char.type === "memo" ? "📝" : (char.image && !char.image.startsWith("http") ? char.image : "👤");
-th.innerHTML = ⁠<div class="flex items-center space-x-1.5"> <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background-color: ${char.color}"></span> <span class="text-xs">${iconBadge}</span> <span class="font-bold truncate text-gray-200">${char.name}</span> </div>⁠;
+th.innerHTML = `<div class="flex items-center space-x-1.5"> <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background-color: ${char.color}"></span> <span class="font-bold truncate text-gray-200">${char.name}</span> </div>`;
 headerRow.appendChild(th);
 });
 tbody.innerHTML = "";
 const skipSlots = {};
 curSec.timeSlots.forEach((time, tIdx) => {
 const tr = document.createElement("tr");
-const isTimeHighlighted = activeHighlightTime === time;
-if (isTimeHighlighted) tr.classList.add("highlight-row");
+if (activeHighlightTime === time) tr.classList.add("highlight-row");
 const timeTd = document.createElement("td");
-timeTd.className = ⁠p-2 text-center font-mono border-r border-gray-800 cursor-pointer hover:bg-gray-800 active:bg-gray-700 transition ${isTimeHighlighted ? "text-blue-400 font-bold" : "text-gray-400"}⁠;
+timeTd.className = "p-2 text-center font-mono border-r border-gray-800 cursor-pointer hover:bg-gray-800 text-gray-400";
 timeTd.textContent = time;
 timeTd.onclick = () => toggleTimeHighlight(time);
 tr.appendChild(timeTd);
 curProj.characters.forEach(char => {
-if (skipSlots[⁠${char.id}-${tIdx}⁠]) return;
+if (skipSlots[`${char.id}-${tIdx}`]) return;
 const td = document.createElement("td");
 td.className = "p-1.5 border-r border-gray-800/40 align-top transition";
-td.ondragover = (e) => {
-if (appMode === 'edit') {
-e.preventDefault();
-td.classList.add("drag-over-cell");
-}
-};
-td.ondragleave = () => td.classList.remove("drag-over-cell");
-td.ondrop = (e) => {
-td.classList.remove("drag-over-cell");
-handleCellDrop(e, curSec.id, char.id, time);
-};
-const card = curProj.cards.find(c => {
-const cStart = c.startTime || c.time;
-return c.sectionId === curSec.id && cStart === time && c.charId === char.id;
-});
+const card = curProj.cards.find(c => c.sectionId === curSec.id && c.startTime === time && c.charId === char.id);
 if (card) {
-let span = 1;
-const cStart = card.startTime || card.time;
-const cEnd = card.endTime || cStart;
-const endIdx = curSec.timeSlots.indexOf(cEnd);
+const endIdx = curSec.timeSlots.indexOf(card.endTime || card.startTime);
 if (endIdx > tIdx) {
-span = endIdx - tIdx + 1;
-for (let i = 1; i < span; i++) {
-skipSlots[⁠${char.id}-${tIdx + i}⁠] = true;
-}
+const span = endIdx - tIdx + 1;
+for (let i = 1; i < span; i++) skipSlots[`${char.id}-${tIdx + i}`] = true;
 td.rowSpan = span;
-td.classList.add("bg-indigo-950/20");
 }
-const cardEl = createCardElement(card, char, span > 1, false);
-td.appendChild(cardEl);
+td.appendChild(createCardElement(card, char));
 } else {
 td.classList.add("h-16");
 if (appMode === "edit") {
@@ -619,206 +445,78 @@ tr.appendChild(td);
 tbody.appendChild(tr);
 });
 }
-function createCardElement(card, char, isMultiSlot = false, isTray = false) {
+function createCardElement(card, char) {
 const div = document.createElement("div");
-const isLocationMatched = activeHighlightLocation && card.location === activeHighlightLocation;
-div.className = ⁠p-1.5 rounded bg-gray-900 border border-gray-800 shadow space-y-1 relative group cursor-pointer transition h-full flex flex-col justify-between ${isLocationMatched ? "highlight-location" : ""}⁠;
-div.style.borderLeft = ⁠3px solid ${char ? char.color : '#6b7280'}⁠;
-if (appMode === 'edit') {
-div.draggable = true;
-div.ondragstart = (e) => {
-draggedCardId = card.id;
-e.dataTransfer.setData("text/plain", card.id);
-};
-}
-const cStart = card.startTime || card.time;
-const cEnd = card.endTime || cStart;
-const timeRangeBadge = (cStart && cEnd && cStart !== cEnd)
-? ⁠<span class="bg-blue-900/50 text-blue-300 font-mono text-[9px] px-1 py-0.5 rounded">⏱ ${cStart}〜${cEnd}</span>⁠
-: '';
-const locationBadge = card.location
-? ⁠<span onclick="event.stopPropagation(); toggleLocationHighlight('${card.location}')" class="inline-block bg-gray-800 text-amber-400 hover:bg-amber-950 px-1 py-0.5 rounded text-[9px] cursor-pointer">📍 ${card.location}</span>⁠
-: '';
-const contentText = viewMode === "gm" && card.secretText
-? ⁠<div class="text-indigo-300 font-medium">${card.secretText}</div><div class="text-gray-400 text-[10px] border-t border-gray-800 pt-0.5 mt-0.5">表: ${card.publicText || 'なし'}</div>⁠
-: ⁠<div class="text-gray-200">${card.publicText || '(無言・特になし)'}</div>⁠;
-const trayActions = isTray ? ⁠<div class="pt-1 mt-1 border-t border-gray-800/80 flex items-center justify-between"> <span class="text-[9px] text-gray-500">未配置</span> <button type="button" onclick="event.stopPropagation(); openPlaceModal('${card.id}')" class="bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white px-2 py-0.5 rounded text-[10px] font-medium flex items-center gap-0.5"> <span>⏱</span> 配置する </button> </div>⁠ : '';
-div.innerHTML = ⁠<div class="space-y-1"> <div class="flex items-center justify-between gap-1 flex-wrap"> ${locationBadge} ${timeRangeBadge} </div> ${contentText} </div> ${trayActions}⁠;
-div.onclick = () => {
-if (appMode === "edit") openCardModal(card, isTray);
-};
+div.className = "p-1.5 rounded bg-gray-900 border border-gray-800 shadow space-y-1 cursor-pointer";
+div.style.borderLeft = `3px solid ${char ? char.color : '#6b7280'}`;
+const locBadge = card.location ? `<span class="bg-gray-800 text-amber-400 px-1 py-0.5 rounded text-[9px]">📍 ${card.location}</span>` : '';
+const text = (viewMode === "gm" && card.secretText) ? `<div class="text-indigo-300 font-medium">${card.secretText}</div>` : `<div class="text-gray-200">${card.publicText || '(行動なし)'}</div>`;
+div.innerHTML = `<div class="flex justify-between items-center">${locBadge}</div>${text}`;
+div.onclick = () => { if (appMode === "edit") openCardModal(card); };
 return div;
 }
 function renderTray() {
 const curProj = getCurProject();
 const tray = document.getElementById("unassigned-tray");
 tray.innerHTML = "";
-const unassignedCards = curProj.cards.filter(c => !(c.startTime || c.time) || !c.charId);
-if (unassignedCards.length === 0) {
-tray.innerHTML = ⁠<div class="text-[11px] text-gray-500 text-center py-4">保留カードはありません</div>⁠;
+const unassigned = curProj.cards.filter(c => !c.startTime || !c.charId);
+if (unassigned.length === 0) {
+tray.innerHTML = `<div class="text-[11px] text-gray-500 text-center py-4">保留カードはありません</div>`;
 return;
 }
-unassignedCards.forEach(card => {
-const char = curProj.characters.find(ch => ch.id === card.charId);
-const cardEl = createCardElement(card, char, false, true);
-tray.appendChild(cardEl);
+unassigned.forEach(c => {
+const ch = curProj.characters.find(char => char.id === c.charId);
+tray.appendChild(createCardElement(c, ch));
 });
-}
-function handleTrayDragOver(e) {
-if (appMode === 'edit') e.preventDefault();
-}
-function handleTrayDrop(e) {
-e.preventDefault();
-const cardId = draggedCardId || e.dataTransfer.getData("text/plain");
-if (!cardId) return;
-const curProj = getCurProject();
-const card = curProj.cards.find(c => c.id === cardId);
-if (card) {
-card.charId = null;
-card.startTime = null;
-card.endTime = null;
-saveStore();
-}
-}
-function handleCellDrop(e, sectionId, charId, time) {
-e.preventDefault();
-const cardId = draggedCardId || e.dataTransfer.getData("text/plain");
-if (!cardId) return;
-const curProj = getCurProject();
-const card = curProj.cards.find(c => c.id === cardId);
-if (card) {
-card.sectionId = sectionId;
-card.charId = charId;
-card.startTime = time;
-card.endTime = time;
-saveStore();
-}
-}
-function openPlaceModal(cardId) {
-const curProj = getCurProject();
-const card = curProj.cards.find(c => c.id === cardId);
-if (!card) return;
-openCardModal(card, true);
 }
 function toggleTimeHighlight(time) {
-if (activeHighlightTime === time) {
-activeHighlightTime = null;
-document.getElementById("summary-time-label").textContent = "時刻未選択";
-document.getElementById("summary-content").textContent = "「閲覧モード」で左端の時刻をタップすると、その時間の全員の概要が表示されます。";
-} else {
-activeHighlightTime = time;
-const curProj = getCurProject();
-const curSec = curProj.sections.find(s => s.id === curProj.currentSectionId);
-const targetIdx = curSec.timeSlots.indexOf(time);
-const cardsAtTime = curProj.cards.filter(c => {
-if (c.sectionId !== curSec.id) return false;
-const cStart = c.startTime || c.time;
-const cEnd = c.endTime || cStart;
-if (!cStart) return false;
-const startIdx = curSec.timeSlots.indexOf(cStart);
-const endIdx = curSec.timeSlots.indexOf(cEnd);
-return targetIdx >= startIdx && (endIdx === -1 ? targetIdx === startIdx : targetIdx <= endIdx);
-});
-document.getElementById("summary-time-label").textContent = ⁠【${time}】⁠;
-if (cardsAtTime.length === 0) {
-document.getElementById("summary-content").textContent = "この時間帯の行動記録はありません。";
-} else {
-const summaryArr = cardsAtTime.map(c => {
-const ch = curProj.characters.find(char => char.id === c.charId);
-const name = ch ? ch.name : "未定";
-const cStart = c.startTime || c.time;
-const cEnd = c.endTime || cStart;
-const spanText = (cStart !== cEnd) ? ⁠(${cStart}〜${cEnd})⁠ : '';
-const text = (viewMode === 'gm' && c.secretText) ? c.secretText : (c.publicText || '行動なし');
-return ⁠${name}${spanText}: ${text}⁠;
-});
-document.getElementById("summary-content").textContent = summaryArr.join(" ｜ ");
-}
-}
+activeHighlightTime = (activeHighlightTime === time) ? null : time;
+document.getElementById("summary-time-label").textContent = activeHighlightTime ? `【${time}】` : "時刻未選択";
 renderTimeline();
 }
-function toggleLocationHighlight(loc) {
-activeHighlightLocation = (activeHighlightLocation === loc) ? null : loc;
-renderTimeline();
-}
-function openCardModal(cardOrDefaults, isTray = false) {
-editingCardId = (cardOrDefaults && cardOrDefaults.id) ? cardOrDefaults.id : null;
-const modal = document.getElementById("card-modal");
-const charSelect = document.getElementById("card-char-select");
-const startSelect = document.getElementById("card-start-time");
-const endSelect = document.getElementById("card-end-time");
-const trayBtn = document.getElementById("card-to-tray-btn");
+function openCardModal(c) {
+editingCardId = c && c.id ? c.id : null;
 const curProj = getCurProject();
-const curSec = curProj.sections.find(s => s.id === curProj.currentSectionId);
-charSelect.innerHTML = ⁠<option value="">(未指定 / トレイ)</option>⁠ +
-curProj.characters.map(c => ⁠<option value="${c.id}">${c.name}</option>⁠).join("");
-startSelect.innerHTML = ⁠<option value="">(未指定 / トレイ)</option>⁠ +
-curSec.timeSlots.map(t => ⁠<option value="${t}">${t}</option>⁠).join("");
-endSelect.innerHTML = ⁠<option value="">(開始時間と同じ)</option>⁠ +
-curSec.timeSlots.map(t => ⁠<option value="${t}">${t}</option>⁠).join("");
+const curSec = curProj.sections.find(s => s.id === curProj.currentSectionId) || curProj.sections[0];
+const charSel = document.getElementById("card-char-select");
+charSel.innerHTML = `<option value="">(未指定)</option>` + curProj.characters.map(ch => `<option value="${ch.id}">${ch.name}</option>`).join("");
+const startSel = document.getElementById("card-start-time");
+startSel.innerHTML = `<option value="">(未指定)</option>` + curSec.timeSlots.map(t => `<option value="${t}">${t}</option>`).join("");
+const endSel = document.getElementById("card-end-time");
+endSel.innerHTML = `<option value="">(開始と同じ)</option>` + curSec.timeSlots.map(t => `<option value="${t}">${t}</option>`).join("");
 if (editingCardId) {
-const c = curProj.cards.find(card => card.id === editingCardId);
-charSelect.value = c.charId || "";
-startSelect.value = c.startTime || c.time || "";
-endSelect.value = (c.endTime && c.endTime !== (c.startTime || c.time)) ? c.endTime : "";
-document.getElementById("card-location").value = c.location || "";
-document.getElementById("card-public-text").value = c.publicText || "";
-document.getElementById("card-secret-text").value = c.secretText || "";
-document.getElementById("card-delete-btn").classList.remove("hidden");
-if (c.charId && (c.startTime || c.time)) {
-trayBtn.classList.remove("hidden");
+const card = curProj.cards.find(item => item.id === editingCardId);
+charSel.value = card.charId || "";
+startSel.value = card.startTime || "";
+endSel.value = card.endTime || "";
+document.getElementById("card-location").value = card.location || "";
+document.getElementById("card-public-text").value = card.publicText || "";
+document.getElementById("card-secret-text").value = card.secretText || "";
 } else {
-trayBtn.classList.add("hidden");
-}
-} else {
-const defaultTime = cardOrDefaults?.startTime || cardOrDefaults?.time || "";
-charSelect.value = cardOrDefaults?.charId || "";
-startSelect.value = defaultTime;
-endSelect.value = "";
+charSel.value = c?.charId || "";
+startSel.value = c?.startTime || "";
+endSel.value = "";
 document.getElementById("card-location").value = "";
 document.getElementById("card-public-text").value = "";
 document.getElementById("card-secret-text").value = "";
-document.getElementById("card-delete-btn").classList.add("hidden");
-trayBtn.classList.add("hidden");
 }
-modal.style.display = "flex";
+document.getElementById("card-modal").style.display = "flex";
 }
-function closeCardModal() {
-document.getElementById("card-modal").style.display = "none";
-}
-function moveCurrentCardToTray() {
-if (!editingCardId) return;
-const curProj = getCurProject();
-const card = curProj.cards.find(c => c.id === editingCardId);
-if (card) {
-card.charId = null;
-card.startTime = null;
-card.endTime = null;
-saveStore();
-}
-closeCardModal();
-}
+function closeCardModal() { document.getElementById("card-modal").style.display = "none"; }
 function saveCard() {
+const curProj = getCurProject();
 const charId = document.getElementById("card-char-select").value || null;
 const startTime = document.getElementById("card-start-time").value || null;
-let endTime = document.getElementById("card-end-time").value || null;
-if (!endTime) endTime = startTime;
-const curProj = getCurProject();
-const curSec = curProj.sections.find(s => s.id === curProj.currentSectionId);
-if (startTime && endTime) {
-const sIdx = curSec.timeSlots.indexOf(startTime);
-const eIdx = curSec.timeSlots.indexOf(endTime);
-if (eIdx < sIdx) endTime = startTime;
-}
+let endTime = document.getElementById("card-end-time").value || startTime;
 const location = document.getElementById("card-location").value.trim();
 const publicText = document.getElementById("card-public-text").value.trim();
 const secretText = document.getElementById("card-secret-text").value.trim();
 if (editingCardId) {
-const card = curProj.cards.find(c => c.id === editingCardId);
-Object.assign(card, { charId, startTime, endTime, location, publicText, secretText });
+const c = curProj.cards.find(item => item.id === editingCardId);
+Object.assign(c, { charId, startTime, endTime, location, publicText, secretText });
 } else {
 curProj.cards.push({
-id: "card-" + Date.now(),
+id: "c-" + Date.now(),
 sectionId: curProj.currentSectionId,
 charId, startTime, endTime, location, publicText, secretText
 });
@@ -833,58 +531,43 @@ curProj.cards = curProj.cards.filter(c => c.id !== editingCardId);
 closeCardModal();
 saveStore();
 }
-function openCharacterModal() {
-document.getElementById("char-modal").style.display = "flex";
-}
-function closeCharModal() {
-document.getElementById("char-modal").style.display = "none";
-}
-function toggleColType(type) {
-document.getElementById("char-image-group").style.display = (type === "memo") ? "none" : "block";
-}
+function openCharacterModal() { document.getElementById("char-modal").style.display = "flex"; }
+function closeCharModal() { document.getElementById("char-modal").style.display = "none"; }
 function saveCharacter() {
 const name = document.getElementById("new-char-name").value.trim();
-if (!name) {
-alert("名前を入力してください。");
-return;
-}
-const type = document.querySelector('input[name="col-type"]:checked').value;
-const image = document.getElementById("new-char-image").value.trim();
-const color = document.getElementById("new-char-color").value;
+if (!name) return;
 const curProj = getCurProject();
-curProj.characters.push({ id: "col-" + Date.now(), name, type, image, color });
+curProj.characters.push({
+id: "char-" + Date.now(),
+name,
+color: document.getElementById("new-char-color").value
+});
 document.getElementById("new-char-name").value = "";
-document.getElementById("new-char-image").value = "";
 closeCharModal();
 saveStore();
 }
 function addSection() {
-const name = prompt("新しいセクション名を入力してください（例: 3日目、事件当日、脱出フェーズ）");
+const name = prompt("セクション名（例: 3日目）");
 if (!name) return;
 const curProj = getCurProject();
 const id = "sec-" + Date.now();
-const prevSlots = curProj.sections[curProj.sections.length - 1]?.timeSlots || ["08:00", "10:00", "12:00", "14:00"];
-curProj.sections.push({ id, name, timeSlots: [...prevSlots] });
+curProj.sections.push({ id, name, timeSlots: ["08:00", "10:00", "12:00", "14:00"] });
 curProj.currentSectionId = id;
 saveStore();
 }
 function openTimeSlotsModal() {
 const curProj = getCurProject();
-const curSec = curProj.sections.find(s => s.id === curProj.currentSectionId);
+const curSec = curProj.sections.find(s => s.id === curProj.currentSectionId) || curProj.sections[0];
 document.getElementById("time-slots-input").value = curSec.timeSlots.join(", ");
 document.getElementById("time-modal").style.display = "flex";
 }
-function closeTimeSlotsModal() {
-document.getElementById("time-modal").style.display = "none";
-}
+function closeTimeSlotsModal() { document.getElementById("time-modal").style.display = "none"; }
 function saveTimeSlots() {
 const raw = document.getElementById("time-slots-input").value.trim();
 if (!raw) return;
-const slots = raw.split(/[,、\n]+/).map(s => s.trim()).filter(Boolean);
-if (slots.length === 0) return;
 const curProj = getCurProject();
-const curSec = curProj.sections.find(s => s.id === curProj.currentSectionId);
-curSec.timeSlots = slots;
+const curSec = curProj.sections.find(s => s.id === curProj.currentSectionId) || curProj.sections[0];
+curSec.timeSlots = raw.split(/[,、\n]+/).map(s => s.trim()).filter(Boolean);
 closeTimeSlotsModal();
 saveStore();
 }
@@ -892,7 +575,7 @@ function exportAllData() {
 const blob = new Blob([JSON.stringify(db, null, 2)], { type: "application/json" });
 const a = document.createElement("a");
 a.href = URL.createObjectURL(blob);
-a.download = ⁠timeline_projects_${new Date().toISOString().slice(0,10)}.json⁠;
+a.download = `timeline_${new Date().toISOString().slice(0,10)}.json`;
 a.click();
 }
 function importAllData(e) {
@@ -903,9 +586,9 @@ reader.onload = (event) => {
 try {
 db = JSON.parse(event.target.result);
 saveStore();
-alert("全作品データを読み込みました！");
+alert("読み込み完了！");
 } catch(err) {
-alert("JSONの読み込みに失敗しました。");
+alert("読み込み失敗");
 }
 };
 reader.readAsText(file);
@@ -915,11 +598,12 @@ const curProj = getCurProject();
 const blob = new Blob([JSON.stringify(curProj, null, 2)], { type: "application/json" });
 const a = document.createElement("a");
 a.href = URL.createObjectURL(blob);
-a.download = ⁠${curProj.title}_${new Date().toISOString().slice(0,10)}.json⁠;
+a.download = `${curProj.title}.json`;
 a.click();
 }
-// 初期起動: 作品一覧からスタート
+window.addEventListener("DOMContentLoaded", () => {
 showScreen("projects");
+});
 </script>
 </body>
 </html>
