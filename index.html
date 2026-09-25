@@ -488,6 +488,7 @@ tr.appendChild(td);
 });
 tbody.appendChild(tr);
 });
+updateSummaryBar();
 }
 function createCardElement(card, char) {
 const div = document.createElement("div");
@@ -515,8 +516,39 @@ tray.appendChild(createCardElement(c, ch));
 }
 function toggleTimeHighlight(time) {
 activeHighlightTime = (activeHighlightTime === time) ? null : time;
-document.getElementById("summary-time-label").textContent = activeHighlightTime ? `【${time}】` : "時刻未選択";
 renderTimeline();
+}
+function updateSummaryBar() {
+const label = document.getElementById("summary-time-label");
+const content = document.getElementById("summary-content");
+if (!activeHighlightTime) {
+label.textContent = "時刻未選択";
+content.textContent = "「閲覧モード」で左端の時刻をタップすると、その時間の全員の概要が表示されます。";
+return;
+}
+label.textContent = `【${activeHighlightTime}】`;
+const curProj = getCurProject();
+const curSec = curProj.sections.find(s => s.id === curProj.currentSectionId) || curProj.sections[0];
+const timeIdx = curSec.timeSlots.indexOf(activeHighlightTime);
+if (!curProj.characters.length) {
+content.textContent = "キャラ・メモ列がまだ登録されていません。";
+return;
+}
+const parts = curProj.characters.map(char => {
+const card = curProj.cards.find(c => {
+if (c.sectionId !== curSec.id || c.charId !== char.id) return false;
+const startIdx = curSec.timeSlots.indexOf(c.startTime);
+if (startIdx === -1) return false;
+const endIdx = curSec.timeSlots.indexOf(c.endTime || c.startTime);
+const realEndIdx = endIdx === -1 ? startIdx : endIdx;
+return timeIdx >= startIdx && timeIdx <= realEndIdx;
+});
+if (!card) return `${char.name}: (行動未設定)`;
+const text = (viewMode === "gm" && card.secretText) ? card.secretText : (card.publicText || "(行動なし)");
+const loc = card.location ? `[${card.location}] ` : "";
+return `${char.name}: ${loc}${text}`;
+});
+content.textContent = parts.join("　／　");
 }
 function openCardModal(c) {
 editingCardId = c && c.id ? c.id : null;
@@ -636,27 +668,40 @@ e.target.value = "";
 return;
 }
 try {
-if (parsed && Array.isArray(parsed.projects)) {
-// 「全作品を保存」形式（db全体）
+if (parsed && typeof parsed === "object" && Array.isArray(parsed.projects)) {
+// 「全作品を保存」形式（db全体）: { activeProjectId, projects: [...] }
 db = parsed;
+if (!Array.isArray(db.projects)) db.projects = [];
 if (!db.activeProjectId || !db.projects.find(p => p.id === db.activeProjectId)) {
 db.activeProjectId = db.projects.length ? db.projects[0].id : null;
 }
-} else if (parsed && Array.isArray(parsed.sections) && Array.isArray(parsed.characters)) {
-// 「この作品を保存」形式（作品1件分）
+} else if (Array.isArray(parsed)) {
+// 万一「projects配列」だけを直接書き出したファイルだった場合の救済
+db.projects = db.projects.concat(parsed.map(p => ({ ...p, id: "p-" + Date.now() + "-" + Math.random().toString(36).slice(2,7) })));
+db.activeProjectId = db.projects[db.projects.length - 1].id;
+} else if (parsed && typeof parsed === "object" && (Array.isArray(parsed.sections) || Array.isArray(parsed.characters) || Array.isArray(parsed.cards))) {
+// 「この作品を保存」形式（作品1件分）: 最低限 sections/characters/cards のいずれかがあれば作品データとみなす
 if (!parsed.id || db.projects.find(p => p.id === parsed.id)) {
 parsed.id = "p-" + Date.now();
 }
+if (!Array.isArray(parsed.sections) || parsed.sections.length === 0) {
+parsed.sections = [{ id: "sec-1", name: "1日目", timeSlots: ["08:00", "10:00", "12:00", "14:00"] }];
+}
+if (!parsed.currentSectionId || !parsed.sections.find(s => s.id === parsed.currentSectionId)) {
+parsed.currentSectionId = parsed.sections[0].id;
+}
+if (!Array.isArray(parsed.characters)) parsed.characters = [];
 if (!Array.isArray(parsed.cards)) parsed.cards = [];
+if (!parsed.title) parsed.title = "無題の作品";
 db.projects.push(parsed);
 db.activeProjectId = parsed.id;
 } else {
-throw new Error("unrecognized format");
+throw new Error("このJSONには projects / sections / characters / cards のいずれも見つかりませんでした。実際のキー: " + (parsed && typeof parsed === "object" ? Object.keys(parsed).join(", ") : typeof parsed));
 }
 saveStore();
 alert("読み込み完了！");
 } catch (err) {
-alert("読み込み失敗：ファイルの形式が正しくありません");
+alert("読み込み失敗：ファイルの形式が正しくありません\n詳細: " + err.message);
 } finally {
 e.target.value = "";
 }
