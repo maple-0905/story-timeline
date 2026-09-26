@@ -527,20 +527,26 @@ tr.appendChild(timeTd);
 curProj.characters.forEach(char => {
 if (skipSlots[`${char.id}-${tIdx}`]) return;
 const td = document.createElement("td");
-td.className = "p-1.5 border-r border-gray-800/40 align-top transition";
+td.className = "border-r border-gray-800/40 align-top transition relative";
 td.dataset.time = time;
 td.dataset.charId = char.id;
 const card = curProj.cards.find(c => c.sectionId === curSec.id && c.startTime === time && c.charId === char.id);
 if (card) {
 const endIdx = curSec.timeSlots.indexOf(card.endTime || card.startTime);
+let spanCount = 1;
 if (endIdx > tIdx) {
-const span = endIdx - tIdx + 1;
-for (let i = 1; i < span; i++) skipSlots[`${char.id}-${tIdx + i}`] = true;
-td.rowSpan = span;
+spanCount = endIdx - tIdx + 1;
+for (let i = 1; i < spanCount; i++) skipSlots[`${char.id}-${tIdx + i}`] = true;
+td.rowSpan = spanCount;
 }
-td.appendChild(createCardElement(card, char));
+if (spanCount > 1) {
+td.classList.add("relative");
 } else {
-td.classList.add("h-16");
+td.classList.add("p-1.5");
+}
+td.appendChild(createCardElement(card, char, { fill: spanCount > 1 }));
+} else {
+td.classList.add("h-16", "p-1.5");
 if (appMode === "edit") {
 td.onclick = () => openCardModal({ sectionId: curSec.id, startTime: time, charId: char.id });
 td.classList.add("hover:bg-gray-900/40", "cursor-pointer");
@@ -559,7 +565,9 @@ applyLocationHighlights();
 function createCardElement(card, char, opts) {
 opts = opts || {};
 const div = document.createElement("div");
-div.className = "p-1.5 rounded bg-gray-900 border border-gray-800 shadow space-y-1 cursor-pointer";
+div.className = opts.fill
+? "absolute inset-1.5 flex flex-col p-1.5 rounded bg-gray-900 border border-gray-800 shadow space-y-1 cursor-pointer overflow-y-auto"
+: "flex flex-col p-1.5 rounded bg-gray-900 border border-gray-800 shadow space-y-1 cursor-pointer";
 div.style.borderLeft = `3px solid ${char ? char.color : '#6b7280'}`;
 div.dataset.cardId = card.id;
 if (appMode === "edit" && !IS_TOUCH_DEVICE) {
